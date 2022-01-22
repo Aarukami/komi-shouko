@@ -472,7 +472,7 @@ def stats(update: Update, context: CallbackContext):
     status += "*• Database size:* " + str(db_size) + "\n"
     kb = [
           [
-           InlineKeyboardButton('Ping', callback_data='pingkomi')
+           InlineKeyboardButton('Ping', callback_data='ping_komi')
           ]
     ]
     try:
@@ -481,7 +481,7 @@ def stats(update: Update, context: CallbackContext):
             + "\n".join([mod.__stats__() for mod in STATS]) +
             "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n" +
             "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n",
-        parse_mode=ParseMode.MARKDOWN , disable_web_page_preview=True)
+        parse_mode=ParseMode.MARKDOWN , reply_markup=InlineKeyboardMarkup(kb) , disable_web_page_preview=True)
     except BaseException:
         update.effective_message.reply_text(
             (
@@ -497,7 +497,19 @@ def stats(update: Update, context: CallbackContext):
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(kb),
             disable_web_page_preview=True,
-        )  
+        ) 
+        
+def pingkomi(update: Update, context: CallbackContext) -> str:
+    query: Optional[CallbackQuery] = update.callback_query
+    user: Optional[User] = update.effective_user
+    bot: Optional[Bot] = context.bot
+    match = re.match(r"ping_komi\((.+?)\)", query.data)
+    if match:
+        start_time = time.time()
+        requests.get('https://api.telegram.org')
+        end_time = time.time()
+        ping_time = round((end_time - start_time) * 1000, 3)
+        query.answer('Pong! {}ms'.format(ping_time))
         
 def about_bio(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
@@ -577,7 +589,7 @@ def set_about_bio(update: Update, context: CallbackContext):
                     ),
                 )
     else:
-        message.reply_text("Reply to someone to set their bio!")
+        message.reply_text("Reply to someone to set their bio!")   
         
         
 
@@ -633,7 +645,7 @@ GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, run_async=True)
 
 STATS_HANDLER = CommandHandler(["stats", "statistics"], stats, run_async=True)
 ID_HANDLER = DisableAbleCommandHandler("id", get_id, run_async=True)
-PINGKOMI_HANDLER = CallbackQueryHandler(pingCallback, pattern=r"pingkomi", run_async=True)
+PING_KOMI_HANDLER = CallbackQueryHandler(pingkomi, pattern=r"ping_komi", run_async=True)
 GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid, run_async=True)
 INFO_HANDLER = DisableAbleCommandHandler("info", info, run_async=True)
 
@@ -644,6 +656,7 @@ dispatcher.add_handler(STATS_HANDLER)
 dispatcher.add_handler(ID_HANDLER)
 dispatcher.add_handler(GIFID_HANDLER)
 dispatcher.add_handler(INFO_HANDLER)
+dispatcher.add_handler(PING_KOMI_HANDLER)
 dispatcher.add_handler(SET_BIO_HANDLER)
 dispatcher.add_handler(GET_BIO_HANDLER)
 dispatcher.add_handler(SET_ABOUT_HANDLER)
