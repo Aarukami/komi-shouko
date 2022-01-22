@@ -538,7 +538,7 @@ def about_bio(update: Update, context: CallbackContext):
         
 def pingCallback(update: Update, context: CallbackContext):
     query = update.callback_query
-    match = re.match(r"pingkomi\((.+?)\)", query.data)
+    match = re.match(r"ping_komi\((.+?)\)", query.data)
     if match:
        start_time = time.time()
        requests.get('https://api.telegram.org')
