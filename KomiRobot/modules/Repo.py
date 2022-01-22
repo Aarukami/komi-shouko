@@ -7,6 +7,8 @@ from pyrogram import filters
 from KomiRobot import pbot
 from KomiRobot.utils.errors import capture_err
 
+MEMEK = "https://te.legra.ph/file/a7fb554556e7a024fb5e7.jpg"
+
 @pbot.on_message(filters.command("repo"))
 async def repo(_, message):
     await message.reply_photo(
