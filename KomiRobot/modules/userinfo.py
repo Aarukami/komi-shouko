@@ -481,7 +481,7 @@ def stats(update: Update, context: CallbackContext):
             + "\n".join([mod.__stats__() for mod in STATS]) +
             "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n" +
             "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n",
-        parse_mode=ParseMode.MARKDOWN , reply_markup=InlineKeyboardMarkup(kb), disable_web_page_preview=True)
+        parse_mode=ParseMode.MARKDOWN , disable_web_page_preview=True)
     except BaseException:
         update.effective_message.reply_text(
             (
@@ -644,7 +644,6 @@ dispatcher.add_handler(STATS_HANDLER)
 dispatcher.add_handler(ID_HANDLER)
 dispatcher.add_handler(GIFID_HANDLER)
 dispatcher.add_handler(INFO_HANDLER)
-dispatcher.add_handler(PINGKOMI_HANDLER)
 dispatcher.add_handler(SET_BIO_HANDLER)
 dispatcher.add_handler(GET_BIO_HANDLER)
 dispatcher.add_handler(SET_ABOUT_HANDLER)
