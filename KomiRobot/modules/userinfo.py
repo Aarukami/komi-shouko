@@ -470,13 +470,18 @@ def stats(update: Update, context: CallbackContext):
     status += "*• python-telegram-bot:* " + str(ptbver) + "\n"
     status += "*• Uptime:* " + str(botuptime) + "\n"
     status += "*• Database size:* " + str(db_size) + "\n"
+    kb = [
+          [
+           InlineKeyboardButton('Ping', callback_data='pingkomi')
+          ]
+    ]
     try:
         update.effective_message.reply_text(status +
             "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS]) +
             "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n" +
             "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n",
-        parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+        parse_mode=ParseMode.MARKDOWN , reply_markup=InlineKeyboardMarkup(kb), disable_web_page_preview=True)
     except BaseException:
         update.effective_message.reply_text(
             (
@@ -518,6 +523,16 @@ def about_bio(update: Update, context: CallbackContext):
             "You haven't had a bio set about yourself yet!",
         )
 
+        
+def pingCallback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    match = re.match(r"pingkomi\((.+?)\)", query.data)
+    if match:
+       start_time = time.time()
+       requests.get('https://api.telegram.org')
+       end_time = time.time()
+       ping_time = round((end_time - start_time) * 1000, 3)
+       query.answer('Pong! {}ms'.format(ping_time))
 
 def set_about_bio(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -618,6 +633,7 @@ GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, run_async=True)
 
 STATS_HANDLER = CommandHandler(["stats", "statistics"], stats, run_async=True)
 ID_HANDLER = DisableAbleCommandHandler("id", get_id, run_async=True)
+PINGKOMI_HANDLER = CallbackQueryHandler(pingCallback, pattern=r"pingkomi", run_async=True)
 GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid, run_async=True)
 INFO_HANDLER = DisableAbleCommandHandler("info", info, run_async=True)
 
@@ -628,6 +644,7 @@ dispatcher.add_handler(STATS_HANDLER)
 dispatcher.add_handler(ID_HANDLER)
 dispatcher.add_handler(GIFID_HANDLER)
 dispatcher.add_handler(INFO_HANDLER)
+dispatcher.add_handler(PINGKOMI_HANDLER)
 dispatcher.add_handler(SET_BIO_HANDLER)
 dispatcher.add_handler(GET_BIO_HANDLER)
 dispatcher.add_handler(SET_ABOUT_HANDLER)
@@ -641,6 +658,7 @@ __handlers__ = [
     INFO_HANDLER,
     SET_BIO_HANDLER,
     GET_BIO_HANDLER,
+    PINGKOMI_HANDLER,
     SET_ABOUT_HANDLER,
     GET_ABOUT_HANDLER,
     STATS_HANDLER,
