@@ -2,6 +2,7 @@ import html
 import re
 import random
 import os
+import git
 import requests
 import datetime
 import platform
@@ -448,15 +449,50 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    stats = "<b>╔═━「Shouko Komi • 𝗕𝗼𝗻𝘁𝗲𝗻 •」</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
-    result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
-    result += "\n<b>╘═━「 Powered By • 𝗕𝗼𝗻𝘁𝗲𝗻 •」</b>"
-    update.effective_message.reply_text(
-        result, 
-        parse_mode=ParseMode.HTML, 
-        disable_web_page_preview=True
-   )
-        
+    db_size = SESSION.execute("SELECT pg_size_pretty(pg_database_size(current_database()))").scalar_one_or_none()
+    uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+    botuptime = get_readable_time((time.time() - StartTime))
+    status = "*╒═══「 Shouko komi statistics: 」*\n\n"
+    status += "*• System Start time:* " + str(uptime) + "\n"
+    uname = platform.uname()
+    status += "*• System:* " + str(uname.system) + "\n"
+    status += "*• Node name:* " + escape_markdown(str(uname.node)) + "\n"
+    status += "*• Release:* " + escape_markdown(str(uname.release)) + "\n"
+    status += "*• Machine:* " + escape_markdown(str(uname.machine)) + "\n"
+
+    mem = virtual_memory()
+    cpu = cpu_percent()
+    disk = disk_usage("/")
+    status += "*• CPU:* " + str(cpu) + " %\n"
+    status += "*• RAM:* " + str(mem[2]) + " %\n"
+    status += "*• Storage:* " + str(disk[3]) + " %\n\n"
+    status += "*• Python version:* " + python_version() + "\n"
+    status += "*• python-telegram-bot:* " + str(ptbver) + "\n"
+    status += "*• Uptime:* " + str(botuptime) + "\n"
+    status += "*• Database size:* " + str(db_size) + "\n"
+    try:
+        update.effective_message.reply_text(status +
+            "\n*Bot statistics*:\n"
+            + "\n".join([mod.__stats__() for mod in STATS]) +
+            "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n" +
+            "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n",
+        parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+    except BaseException:
+        update.effective_message.reply_text(
+            (
+                (
+                    (
+                        "\n*Bot statistics*:\n"
+                        + "\n".join(mod.__stats__() for mod in STATS)
+                    )
+                    + "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n"
+                )
+                + "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n"
+            ),
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(kb),
+            disable_web_page_preview=True,
+        )  
         
 def about_bio(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
@@ -527,6 +563,8 @@ def set_about_bio(update: Update, context: CallbackContext):
                 )
     else:
         message.reply_text("Reply to someone to set their bio!")
+        
+        
 
 
 def __user_info__(user_id):
