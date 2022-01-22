@@ -11,7 +11,7 @@ from KomiRobot.utils.errors import capture_err
 async def repo(_, message):
     await message.reply_photo(
         photo=MEMEK,
-        caption=f""" **Ore no Izana kurokawa desu**  
+        caption=f""" **Ore no Shouko komi desu**  
 
 **Owner repo : [Blank](https://t.me/Girl_lob)**
 **Python Version :** `{y()}`
@@ -27,7 +27,7 @@ async def repo(_, message):
                     InlineKeyboardButton(
                         "Owner", url="https://t.me/girl_lob"), 
                     InlineKeyboardButton(
-                        "Support", url="https://t.me/Izanasupport")
+                        "Support", url="https://t.me/komiXsupport")
                 ]
             ]
         )
