@@ -15,8 +15,8 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from telethon import events
 
-from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver, InlineKeyboardButton, InlineKeyboardMarkup 
-from telegram.ext import CallbackContext, CommandHandler
+from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver, InlineKeyboardButton, InlineKeyboardMarkup , CallbackQuery
+from telegram.ext import CallbackContext, CommandHandler ,CallbackQueryHandler
 from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
@@ -265,8 +265,8 @@ def info(update: Update, context: CallbackContext):
         text += f"\n✪ Last Name: {html.escape(user.last_name)}"
     if user.username:
         text += f"\n✪ Username: @{html.escape(user.username)}"
-        komifg= ["nibbi","nibba","God","darling","Senpai","Sensei","nigga", "chutiya" , "onichan",user.first_name,]
-        komisenpai= random.choice(komifg)
+        komi= ["nibbi","nibba","God","darling","Senpai","Sensei","nigga", "chutiya" , "onichan",user.first_name,]
+        komisenpai= random.choice(komi)
         
     text += f"\n✪ Userlink: {mention_html(user.id, komisenpai)}"
     text += "\n✪ UwU pfp: {}".format(
@@ -316,6 +316,8 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += f"\n\nThis user is my frnd."
         disaster_level_present = True
+    elif user.id == 5014344388:
+        text += f"\n\n This user is my hubby ARNAB."
 
     try:
         user_member = chat.get_member(user.id)
@@ -631,6 +633,7 @@ GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, run_async=True)
 
 STATS_HANDLER = CommandHandler(["stats", "statistics"], stats, run_async=True)
 ID_HANDLER = DisableAbleCommandHandler("id", get_id, run_async=True)
+PINGKOMI_HANDLER = CallbackQueryHandler(pingCallback, pattern=r"pingkomi", run_async=True)
 GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid, run_async=True)
 INFO_HANDLER = DisableAbleCommandHandler("info", info, run_async=True)
 
@@ -654,6 +657,7 @@ __handlers__ = [
     INFO_HANDLER,
     SET_BIO_HANDLER,
     GET_BIO_HANDLER,
+    PINGKOMI_HANDLER,
     SET_ABOUT_HANDLER,
     GET_ABOUT_HANDLER,
     STATS_HANDLER,
