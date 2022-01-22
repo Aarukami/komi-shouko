@@ -15,9 +15,9 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from telethon import events
 
-from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler
-from telegram.ext.dispatcher import run_async
+from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver, InlineKeyboardButton, InlineKeyboardMarkup , CallbackQuery
+from telegram.ext import CallbackContext, CommandHandler ,CallbackQueryHandler
+from telegram.ext.dispatcher import run_asyn
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
     
