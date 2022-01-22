@@ -17,7 +17,7 @@ from telethon import events
 
 from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver, InlineKeyboardButton, InlineKeyboardMarkup , CallbackQuery
 from telegram.ext import CallbackContext, CommandHandler ,CallbackQueryHandler
-from telegram.ext.dispatcher import run_asyn
+from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
     
