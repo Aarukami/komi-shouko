@@ -255,30 +255,24 @@ def info(update: Update, context: CallbackContext):
     
     first_name = update.effective_user.first_name
     rep = message.reply_text("*UwU matte matte kudasai {}*...".format(escape_markdown(first_name)),parse_mode=ParseMode.MARKDOWN)
-
-
     text = (
-        f"╔═━「<b> About User {html.escape(user.first_name)}:</b> 」\n"
+        f"╔═━「<b> UwU about {html.escape(user.first_name)}:</b> 」\n"
         f"✪ ID: <code>{user.id}</code>\n"
         f"✪ First Name: {html.escape(user.first_name)}"
     )
-
     if user.last_name:
         text += f"\n✪ Last Name: {html.escape(user.last_name)}"
-
     if user.username:
         text += f"\n✪ Username: @{html.escape(user.username)}"
         komi= ["nibbi","nibba","God","darling","Senpai","Sensei","nigga", "chutiya" , "onichan",user.first_name,]
         komisenpai= random.choice(komi)
         
     text += f"\n✪ Userlink: {mention_html(user.id, komisenpai)}"
-    text += "\n✪ Pfp Count: {}".format(
+    text += "\n✪ UwU pfp: {}".format(
         context.bot.get_user_profile_photos(user.id).total_count
     )
-
     if chat.type != "private" and user_id != bot.id:
         _stext = "\n✪ Presence: <code>{}</code>"
-
         afk_st = is_afk(user.id)
         if afk_st:
             text += _stext.format("AFK")
@@ -294,7 +288,6 @@ def info(update: Update, context: CallbackContext):
     if user_id not in [bot.id, 777000, 1087968824]:
         userhp = hpmanager(user)
         text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
-
     try:
         spamwtc = sw.get_ban(int(user.id))
         if spamwtc:
@@ -303,26 +296,24 @@ def info(update: Update, context: CallbackContext):
             text += "\nAppeal at @SpamWatchSupport"
     except:
         pass  # don't crash if api is down somehow...
-
     disaster_level_present = False
-
     if user.id == OWNER_ID:
-        text += f"\n\nThis user is Boss Of Bonten."
+        text += f"\n\nThis user is my Hubby."
         disaster_level_present = True
     elif user.id in DEV_USERS:
-        text += f"\n\nThis user is  Heavenly King."
+        text += f"\n\nThis user is my Onichan."
         disaster_level_present = True
     elif user.id in DRAGONS:
-        text += f"\n\nThis user is is Executives."
+        text += f"\n\nThis user is my Sensei."
         disaster_level_present = True
     elif user.id in DEMONS:
-        text +=f"\n\nThis user is is General Chief."
+        text +=f"\n\nThis user is my Senpai."
         disaster_level_present = True
     elif user.id in TIGERS:
-        text += f"\n\nThis user is is Treasure."
+        text += f"\n\nThis user is my Bestfrnd."
         disaster_level_present = True
     elif user.id in WOLVES:
-        text += f"\n\nThis user is is **Staff**."
+        text += f"\n\nThis user is my frnd."
         disaster_level_present = True
     elif user.id == 5014344388:
         text += f"\n\n This user is my hubby ARNAB."
@@ -457,11 +448,11 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    stats = "<b>╔═━「Izana kurokawa • 𝗕𝗼𝗻𝘁𝗲𝗻 •」</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
+    stats = "<b>╔═━「Shouko Komi • 𝗕𝗼𝗻𝘁𝗲𝗻 •」</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
     result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
     result += "\n<b>╘═━「 Powered By • 𝗕𝗼𝗻𝘁𝗲𝗻 •」</b>"
     update.effective_message.reply_text(
-        result,
+        result, 
         parse_mode=ParseMode.HTML, 
         disable_web_page_preview=True
    )
