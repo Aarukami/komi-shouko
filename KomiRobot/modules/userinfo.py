@@ -500,9 +500,9 @@ def stats(update: Update, context: CallbackContext):
             disable_web_page_preview=True,
         )
         
-siestacallback(pattern=r'^pingkomi')       
+@siestacallback(pattern=r'^pingkomi')       
 def pingkomi(update: Update, context: CallbackContext) -> str:
-    query: Optional[CallbackQuery] = update.callback_query
+    query = update.callback_query
     start_time = time.time()
     requests.get('https://api.telegram.org')
     end_time = time.time()
