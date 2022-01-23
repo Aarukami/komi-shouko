@@ -39,7 +39,7 @@ from KomiRobot.modules.sql import SESSION
 import KomiRobot.modules.sql.userinfo_sql as sql
 from KomiRobot.modules.disable import DisableAbleCommandHandler
 from KomiRobot.modules.sql.global_bans_sql import is_user_gbanned
-from KomiRoboy.modules.helper_funcs.decorators import  siestacallback
+from KomiRobot.modules.helper_funcs.decorators import  siestacallback
 from KomiRobot.modules.sql.afk_sql import is_afk, set_afk
 from KomiRobot.modules.sql.users_sql import get_user_num_chats
 from KomiRobot.modules.helper_funcs.chat_status import sudo_plus
