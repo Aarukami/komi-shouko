@@ -14,8 +14,8 @@ from search_engine_parser import GoogleSearch
 from KomiRobot import BOT_ID, OWNER_ID, ARQ_API_URL, ARQ_API_KEY
 from KomiRobot import pbot
 
-ARQ_API = "WZQUBA-PFAZQJ-OMIINH-MIVHYM-ARQ"
-ARQ_API_KEY = "WZQUBA-PFAZQJ-OMIINH-MIVHYM-ARQ"
+ARQ_API = "ZDJVJU-LRZXRJ-OCLRTF-TLSAJB-ARQ"
+ARQ_API_KEY = "ZDJVJU-LRZXRJ-OCLRTF-TLSAJB-ARQ"
 SUDOERS = OWNER_ID
 ARQ_API_URL = "https://thearq.tech"
 
