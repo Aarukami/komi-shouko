@@ -71,6 +71,7 @@ def get_readable_time(seconds: int) -> str:
     time_list.reverse()
     ping_time += ":".join(time_list)
     return ping_time
+
 PM_START_TEXT = """
 *Hello {} !*
 ✪ I'm an anime-theme management bot [✨](https://te.legra.ph/file/71348ccf46411d7c7a251.mp4)
@@ -91,6 +92,7 @@ DONATE_STRING = """Heya, glad to hear you want to donate!
  You can support the project by contacting @saint_foire \
  Supporting isnt always financial! \
  Those who cannot provide monetary support are welcome to help us develop the bot at ."""
+
 IMPORTED = {}
 MIGRATEABLE = []
 HELPABLE = {}
@@ -100,6 +102,7 @@ DATA_IMPORT = []
 DATA_EXPORT = []
 CHAT_SETTINGS = {}
 USER_SETTINGS = {}
+
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("KomiRobot.modules." + module_name)
     if not hasattr(imported_module, "__mod_name__"):
@@ -126,6 +129,7 @@ for module_name in ALL_MODULES:
     if hasattr(imported_module, "__user_settings__"):
         USER_SETTINGS[imported_module.__mod_name__.lower()] = imported_module
 # do not async
+
 def send_help(chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
@@ -359,7 +363,7 @@ def Komi_about_callback(update, context):
         first_name = update.effective_user.first_name
         uptime = get_readable_time((time.time() - StartTime))
         query.message.edit_text(
-                text=gs(chat.id, "pm_start_text").format(
+                text=PM_START_TEXT.format(
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
