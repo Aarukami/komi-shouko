@@ -80,28 +80,7 @@ PM_START_TEXT = """
 ────────────────────────
 ✪ Hit /help to see my available commands.
 """
-keyoboard = [
-                        [
-                            InlineKeyboardButton(
-                                text="Updates",
-                                url=f"https://t.me/komiinfo",
-                            ),
-                            InlineKeyboardButton(
-                                text="Support Group",
-                                url=f"https://t.me/{SUPPORT_CHAT}",
-                            ),
-                        ],
-                        [
-                            InlineKeyboardButton(
-                                text="Komi setup",
-                                url=f"https://t.me/komiinfo/",
-                            ),
-                            InlineKeyboardButton(
-                                text="Network ",
-                                url=f"https://t.me/DeZilleius",
-                            ),
-                        ],
-                    ],
+
 HELP_STRINGS = """
 Click on the button bellow to get description about specifics command."""
 
@@ -162,6 +141,7 @@ def test(update: Update, context: CallbackContext):
     # update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
     update.effective_message.reply_text("This person edited a message")
     print(update.effective_message)
+    
 def start(update: Update, context: CallbackContext):
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
@@ -211,7 +191,7 @@ def start(update: Update, context: CallbackContext):
                             ),
                             InlineKeyboardButton(
                                 text="About Komi",
-                                callback_data="komi_button",
+                                callback_data="komi_",
                             ),
                         ],
                     ],
@@ -348,28 +328,60 @@ def help_button(update, context):
         # query.message.delete()
     except BadRequest:
         pass
-def komi_about(update , context):
-     query = update.callback_query
-     if query.data ==" komi_button ":
+    
+def Komi_about_callback(update, context):
+    query = update.callback_query
+    chat = update.effective_chat
+    if query.data == "komi_":
         query.message.edit_text(
-            text ="Hello{} *i am Shouko komi*  A powerful anime group management bot."
-            "\nI am from anime Komi san can't communicate "
-            "\nI can help you in manage your group as you want . I can restict, ban , promote and many more thing as you like to unlock all this feature make me admin and read the setup page . If you find any bug in komi or any error or not working you can use /bug `bug query` or contact us on @KomiXsupport ",
-            reply_markup = keyboard,
-            parse_mode = Parse_Mode.HTML,
-            disable_web_page_preview = True,
+            text="๏ I'm *Komi*, a powerful group management bot built to help you manage your group easily."
+            "\n• I can restrict users."
+            "\n• I can greet users with customizable welcome messages and even set a group's rules."
+            "\n• I have an advanced anti-flood system."
+            "\n• I can warn users until they reach max warns, with each predefined actions such as ban, mute, kick, etc."
+            "\n• I have a note keeping system, blacklists, and even predetermined replies on certain keywords."
+            "\n• I check for admins' permissions before executing any command and more stuffs",
+            parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(text="Updates", url ="https://t.me/komiXsupport"),
+                        InlineKeyboardButton(text="support", url ="https://t.me/komiXsupport"),
+                    ],
+                    [
+                    InlineKeyboardButton(text=gs(chat.id, "back_button"), callback_data="siesta_back"),
+                    ]
+                ]
+            ),
         )
-        
-     elif query.data =="siesta_back":
+    elif query.data == "siesta_back":
         first_name = update.effective_user.first_name
         uptime = get_readable_time((time.time() - StartTime))
         query.message.edit_text(
-                PM_START_TEXT.format(
+                text=gs(chat.id, "pm_start_text").format(
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
                     sql.num_chats()),
-                reply_markup=InlineKeyboardMarkup(buttons),
+                reply_markup=InlineKeyboardMarkup(
+
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text="Add Komi In Your Group",
+                                url="t.me/{}?startgroup=true".format(
+                                    context.bot.username,
+                                ),
+                            ),
+                            InlineKeyboardButton(
+                                text="About Komi",
+                                callback_data="komi_",
+                            ),
+                        ],
+                    ],
+                ),
+            
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
                 disable_web_page_preview=False,
@@ -640,8 +652,8 @@ def main():
     settings_callback_handler = CallbackQueryHandler(
         settings_button, pattern=r"stngs_", run_async=True
     )
-    komi_about_handler = CallbackQueryHandler(
-        komi_about, pattern=r"komi_button", run_async=True
+    about_callback_handler = CallbackQueryHandler(
+        Komi_about_callback, pattern=r"komi_", run_async=True
     )
     donate_handler = CommandHandler("donate", donate, run_async=True)
     migrate_handler = MessageHandler(
@@ -650,7 +662,7 @@ def main():
     dispatcher.add_handler(test_handler)
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(help_handler)
-    dispatcher.add_handler(komi_about_handler)
+    dispatcher.add_handler(about_callback_handler)
     dispatcher.add_handler(settings_handler)
     dispatcher.add_handler(help_callback_handler)
     dispatcher.add_handler(settings_callback_handler)
