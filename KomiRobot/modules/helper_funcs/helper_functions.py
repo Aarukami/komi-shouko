@@ -1,6 +1,6 @@
 from KomiRobot.modules.Api.gogoanimeapi import gogoanime as gogo
 from telethon import Button
-from config import bot
+from KomiRobot import telethn as bot
 from KomiRobot.modules.helper_funcs import formating_results as format
 
 async def send_details(event, id):
