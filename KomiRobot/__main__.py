@@ -350,7 +350,7 @@ def Komi_about_callback(update, context):
                         InlineKeyboardButton(text="support", url ="https://t.me/komiXsupport"),
                     ],
                     [
-                    InlineKeyboardButton(text=gs(chat.id, "back_button"), callback_data="siesta_back"),
+                    InlineKeyboardButton(text="back", callback_data="siesta_back"),
                     ]
                 ]
             ),
