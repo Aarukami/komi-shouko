@@ -1,7 +1,7 @@
 from telethon import events, Button
 from KomiRobot.modules.Api.Kissmangaapi import kissmangaapi as kiss
 import KomiRobot.modules.helper_funcs.formating_results as format
-from KomiRobot import tbot as bot
+from KomiRobot import telethn as bot
 from KomiRobot.modules.helper_funcs.helper_functions import *
 
 class Manga():
