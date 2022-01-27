@@ -52,6 +52,7 @@ PyDictionary
 git+https://github.com/Sorrybabe/downloader
 youtube_search_python==1.4.9
 youtube_search
+requests_html
 lyrics_extractor
 asyncio
 cloudscraper
