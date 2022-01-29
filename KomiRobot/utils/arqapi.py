@@ -3,9 +3,6 @@ import sys
 from random import randint
 from time import time
 
-import aiohttp
-from KomiRobot import aiohttpsession 
-from aiohttp import ClientSession
 
 from google_trans_new import google_translator
 from Python_ARQ import ARQ
@@ -24,7 +21,7 @@ print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
+arq = ARQ(ARQ_API_URL, ARQ_API_KEY)
 
 app = pbot
 import socket
