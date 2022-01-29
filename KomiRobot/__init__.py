@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import sys
+import aiohttp
 import json
 import asyncio
 import time
@@ -83,6 +84,10 @@ if ENV:
         TIGERS = {int(x) for x in os.environ.get("TIGERS", "").split()}
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
+        
+    session = aiohttp.ClientSession()
+    # use the session here
+    session.close()
 
     INFOPIC = bool(os.environ.get("INFOPIC", True))
     BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
