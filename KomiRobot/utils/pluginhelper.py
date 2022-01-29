@@ -7,7 +7,7 @@ import traceback
 from functools import wraps
 from typing import Callable, Coroutine, Dict, List, Tuple, Union
 
-import aiohttp
+
 from PIL import Image
 from pyrogram import Client
 from pyrogram.errors import FloodWait, MessageNotModified
@@ -258,14 +258,6 @@ async def convert_seconds_to_minutes(seconds: int):
     return "%02d:%02d" % (minutes, seconds)
 
 
-async def fetch(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            try:
-                data = await resp.json()
-            except Exception:
-                data = await resp.text()
-    return data
 
 
 def get_text(message: Message) -> [None, str]:
