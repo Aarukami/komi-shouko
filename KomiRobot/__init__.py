@@ -11,7 +11,6 @@ import telegram.ext as tg
 
 from inspect import getfullargspec
 from aiohttp import ClientSession
-from Python_ARQ import ARQ
 from telethon import TelegramClient
 from redis import StrictRedis
 from telethon.sessions import StringSession
@@ -261,7 +260,6 @@ dispatcher = updater.dispatcher
 print("[INFO]: INITIALIZING AIOHTTP SESSION")
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ(ARQ_API_URL, ARQ_API_KEY)
 
 ubot2 = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
 try:
