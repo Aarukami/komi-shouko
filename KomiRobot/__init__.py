@@ -24,6 +24,12 @@ from ptbcontrib.postgres_persistence import PostgresPersistence
 
 StartTime = time.time()
 
+
+
+DB_NAME = "db.sqlite3"
+
+conn = connect(DB_NAME)
+
 def get_user_list(__init__, key):
     with open("{}/KomiRobot/{}".format(os.getcwd(), __init__), "r") as json_file:
         return json.load(json_file)[key]
@@ -252,7 +258,6 @@ telethn = TelegramClient("asuna", API_ID, API_HASH)
 pgram = Client("KuramaPyro", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
 dispatcher = updater.dispatcher
 print("[INFO]: INITIALIZING AIOHTTP SESSION")
-aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
