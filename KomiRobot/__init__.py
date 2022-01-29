@@ -91,9 +91,7 @@ if ENV:
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
         
-    session = aiohttp.ClientSession()
-    # use the session here
-    session.close()
+
 
     INFOPIC = bool(os.environ.get("INFOPIC", True))
     BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
