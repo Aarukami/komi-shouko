@@ -6,7 +6,7 @@ from pprint import pprint
 from KomiRobot.utils.keyboard import AKI_LANG_BUTTON, AKI_LEADERBOARD_KEYBOARD, AKI_PLAY_KEYBOARD, AKI_WIN_BUTTON, CHILDMODE_BUTTON, START_KEYBOARD
 from telegram import Update, ParseMode
 from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQueryHandler
-from KomiRobot import TOKEN , , dispatcher
+from KomiRobot import TOKEN  , dispatcher
 from KomiRobot.utils.database import (
     addUser, 
     getChildMode, 
