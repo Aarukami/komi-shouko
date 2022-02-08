@@ -86,7 +86,7 @@ def aki_play_callback_handler(update: Update, context:CallbackContext) -> None:
         aki.win()
         aki = aki.first_guess
         if aki['picture_path'] == 'none.jpg':
-            aki['absolute_picture_path'] = open('KomiRobot/resources/komiimg/none.jpg', 'rb')
+            aki['absolute_picture_path'] = open('KomiRobot/resources/komiimg/komi_none.jpg', 'rb')
         query.message.edit_media(
             InputMediaPhoto(media=aki['absolute_picture_path'],
             caption=f"It's {aki['name']} ({aki['description']})! Was I correct?"
@@ -103,7 +103,7 @@ def aki_win(update: Update, context: CallbackContext):
     if ans =='y':
         query.message.edit_media(
             InputMediaPhoto(
-                media=open('KomiRobot/resources/komiimg/aki_win.png', 'rb'),
+                media=open('KomiRobot/resources/komiimg/komi_win.png', 'rb'),
                 caption="gg!"
             ),
             reply_markup=None
@@ -112,7 +112,7 @@ def aki_win(update: Update, context: CallbackContext):
     else:
         query.message.edit_media(
             InputMediaPhoto(
-                media=open('aki_pics/aki_defeat.png', 'rb'),
+                media=open('KomiRobot/resources/komiimg/komi_defeat.png', 'rb'),
                 caption="bruh :("
             ),
             reply_markup=None
@@ -226,7 +226,6 @@ def aki_lead_cb_handler(update: Update, context:CallbackContext) -> None:
             reply_markup=AKI_LEADERBOARD_KEYBOARD
         )
         
-    dispatcher.add_handler(CommandHandler('start', aki_start, run_async=True))
     dispatcher.add_handler(CommandHandler('find', aki_find, run_async=True))
     dispatcher.add_handler(CommandHandler('me', aki_me, run_async=True))
     dispatcher.add_handler(CommandHandler('play', aki_play_cmd_handler, run_async=True))
