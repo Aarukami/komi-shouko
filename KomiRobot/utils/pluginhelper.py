@@ -1,373 +1,321 @@
 import asyncio
-import math
-import shlex
+import logging
+import os
 import sys
+import json
+import asyncio
 import time
-import traceback
-from functools import wraps
-from typing import Callable, Coroutine, Dict, List, Tuple, Union
+import spamwatch
+import telegram.ext as tg
 
+from inspect import getfullargspec
+from aiohttp import ClientSession
+from Python_ARQ import ARQ
+from telethon import TelegramClient
+from redis import StrictRedis
+from telethon.sessions import StringSession
+from telethon.sessions import MemorySession
+from pyrogram.types import Message
+from pyrogram import Client, errors
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
+from pyrogram.types import Chat, User
+from ptbcontrib.postgres_persistence import PostgresPersistence
 
-from PIL import Image
-from pyrogram import Client
-from pyrogram.errors import FloodWait, MessageNotModified
-from pyrogram.types import Chat, Message, User
+StartTime = time.time()
 
-from KomiRobot import OWNER_ID, SUPPORT_CHAT
-from KomiRobot import pbot
+def get_user_list(__init__, key):
+    with open("{}/KomiRobot/{}".format(os.getcwd(), __init__), "r") as json_file:
+        return json.load(json_file)[key]
 
+# enable logging
+FORMAT = "[KomiRobot] %(message)s"
+logging.basicConfig(
+    handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
+    level=logging.INFO,
+    format=FORMAT,
+    datefmt="[%X]",
+)
+logging.getLogger("pyrogram").setLevel(logging.INFO)
+logging.getLogger('ptbcontrib.postgres_persistence.postgrespersistence').setLevel(logging.WARNING)
 
-def get_user(message: Message, text: str) -> [int, str, None]:
-    if text is None:
-        asplit = None
-    else:
-        asplit = text.split(" ", 1)
-    user_s = None
-    reason_ = None
-    if message.reply_to_message:
-        user_s = message.reply_to_message.from_user.id
-        reason_ = text if text else None
-    elif asplit is None:
-        return None, None
-    elif len(asplit[0]) > 0:
-        user_s = int(asplit[0]) if asplit[0].isdigit() else asplit[0]
-        if len(asplit) == 2:
-            reason_ = asplit[1]
-    return user_s, reason_
+LOGGER = logging.getLogger('[KomiRobot]')
+LOGGER.info("Shouko komi is starting. | An Dezilleius Project Parts. | Licensed under GPLv3.")
+LOGGER.info("Not affiliated to other anime or Villain in any way whatsoever.")
+LOGGER.info("Project maintained by: github.com/Aarukami (t.me/Girls_lob)")
 
+# if version < 3.9, stop bot.
+if sys.version_info[0] < 3 or sys.version_info[1] < 9:
+    LOGGER.error(
+        "You MUST have a python version of at least 3.9! Multiple features depend on this. Bot quitting."
+    )
+    sys.exit(1)
 
-async def is_admin(event, user):
+ENV = bool(os.environ.get("ENV", False))
+
+if ENV:
+    TOKEN = os.environ.get("TOKEN", None)
+
     try:
-        sed = await event.client.get_permissions(event.chat_id, user)
-        is_mod = bool(sed.is_admin)
+        OWNER_ID = int(os.environ.get("OWNER_ID", None))
+    except ValueError:
+        raise Exception("Your OWNER_ID env variable is not a valid integer.")
+
+    JOIN_LOGGER = os.environ.get("JOIN_LOGGER", None)
+    OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
+
+    try:
+        DRAGONS = {int(x) for x in os.environ.get("DRAGONS", "").split()}
+        DEV_USERS = {int(x) for x in os.environ.get("DEV_USERS", "").split()}
+    except ValueError:
+        raise Exception("Your sudo or dev users list does not contain valid integers.")
+
+    try:
+        DEMONS = {int(x) for x in os.environ.get("DEMONS", "").split()}
+    except ValueError:
+        raise Exception("Your support users list does not contain valid integers.")
+
+    try:
+        WOLVES = {int(x) for x in os.environ.get("WOLVES", "").split()}
+    except ValueError: 
+        raise Exception("Your whitelisted users list does not contain valid integers.")
+
+    try:
+        TIGERS = {int(x) for x in os.environ.get("TIGERS", "").split()}
+    except ValueError:
+        raise Exception("Your tiger users list does not contain valid integers.")
+
+    INFOPIC = bool(os.environ.get("INFOPIC", True))
+    BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
+    EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
+    WEBHOOK = bool(os.environ.get("WEBHOOK", False))
+    URL = os.environ.get("URL", "")  # Does not contain token
+    PORT = int(os.environ.get("PORT", 5000))
+    CERT_PATH = os.environ.get("CERT_PATH")
+    API_ID = os.environ.get("API_ID", None)
+    API_HASH = os.environ.get("API_HASH", None)
+    SESSION_STRING = os.environ.get("SESSION_STRING", None)
+    STRING_SESSION = os.environ.get("STRING_SESSION", None)
+    DB_URL = os.environ.get("DATABASE_URL")
+    DB_URL = DB_URL.replace("postgres://", "postgresql://", 1)
+    REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
+    MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+    ARQ_API = os.environ.get("ARQ_API", None)
+    DONATION_LINK = os.environ.get("DONATION_LINK")
+    LOAD = os.environ.get("LOAD", "").split()
+    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", None)
+    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
+    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./")
+    OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", None)
+    VIRUS_API_KEY = os.environ.get("VIRUS_API_KEY", None)
+    NO_LOAD = os.environ.get("NO_LOAD", "translation").split()
+    DEL_CMDS = bool(os.environ.get("DEL_CMDS", False))
+    STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", False))
+    REDIS_URL = os.environ.get("REDIS_URL")
+    WORKERS = int(os.environ.get("WORKERS", 8))
+    BAN_STICKER = os.environ.get("BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg")
+    ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False)
+    CASH_API_KEY = os.environ.get("CASH_API_KEY", None)
+    TIME_API_KEY = os.environ.get("TIME_API_KEY", None)
+    WALL_API = os.environ.get("WALL_API", None)
+    SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
+    SPAMWATCH_SUPPORT_CHAT = os.environ.get("SPAMWATCH_SUPPORT_CHAT", None)
+    SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
+    LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY", None)
+    CF_API_KEY = os.environ.get("CF_API_KEY", None)
+    WELCOME_DELAY_KICK_SEC = os.environ.get("WELCOME_DELAY_KICL_SEC", None)
+    BOT_ID = int(os.environ.get("BOT_ID", None))
+    ARQ_API_URL = "https://thearq.tech"
+    ARQ_API_KEY = ARQ_API
+
+    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
+
+    try:
+        BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
+    except ValueError:
+        raise Exception("Your blacklisted chats list does not contain valid integers.")
+
+else:
+    from KomiRobot.config import Development as Config
+
+    TOKEN = Config.TOKEN
+
+    try:
+        OWNER_ID = int(Config.OWNER_ID)
+    except ValueError:
+        raise Exception("Your OWNER_ID variable is not a valid integer.")
+
+    JOIN_LOGGER = Config.JOIN_LOGGER
+    OWNER_USERNAME = Config.OWNER_USERNAME
+    ALLOW_CHATS = Config.ALLOW_CHATS
+    try:
+        DRAGONS = {int(x) for x in Config.DRAGONS or []}
+        DEV_USERS = {int(x) for x in Config.DEV_USERS or []}
+    except ValueError:
+        raise Exception("Your sudo or dev users list does not contain valid integers.")
+
+    try:
+        DEMONS = {int(x) for x in Config.DEMONS or []}
+    except ValueError:
+        raise Exception("Your support users list does not contain valid integers.")
+
+    try:
+        WOLVES = {int(x) for x in Config.WOLVES or []}
+    except ValueError:
+        raise Exception("Your whitelisted users list does not contain valid integers.")
+
+    try:
+        TIGERS = {int(x) for x in Config.TIGERS or []}
+    except ValueError:
+        raise Exception("Your tiger users list does not contain valid integers.")
+
+    EVENT_LOGS = Config.EVENT_LOGS
+    WEBHOOK = Config.WEBHOOK
+    URL = Config.URL
+    PORT = Config.PORT
+    CERT_PATH = Config.CERT_PATH
+    API_ID = Config.API_ID
+    API_HASH = Config.API_HASH
+
+    DB_URL = Config.SQLALCHEMY_DATABASE_URI
+    MONGO_DB_URI = Config.MONGO_DB_URI
+    ARQ_API = Config.ARQ_API_KEY
+    ARQ_API_URL = Config.ARQ_API_URL
+    DONATION_LINK = Config.DONATION_LINK
+    LOAD = Config.LOAD
+    TEMP_DOWNLOAD_DIRECTORY = Config.TEMP_DOWNLOAD_DIRECTORY
+    OPENWEATHERMAP_ID = Config.OPENWEATHERMAP_ID
+    NO_LOAD = Config.NO_LOAD
+    HEROKU_API_KEY = Config.HEROKU_API_KEY
+    HEROKU_APP_NAME = Config.HEROKU_APP_NAME
+    DEL_CMDS = Config.DEL_CMDS
+    STRICT_GBAN = Config.STRICT_GBAN
+    WORKERS = Config.WORKERS
+    REM_BG_API_KEY = Config.REM_BG_API_KEY
+    BAN_STICKER = Config.BAN_STICKER
+    ALLOW_EXCL = Config.ALLOW_EXCL
+    CASH_API_KEY = Config.CASH_API_KEY
+    REDIS_URL = Config.REDIS_URL
+    TIME_API_KEY = Config.TIME_API_KEY
+    WALL_API = Config.WALL_API
+    SUPPORT_CHAT = Config.SUPPORT_CHAT
+    SPAMWATCH_SUPPORT_CHAT = Config.SPAMWATCH_SUPPORT_CHAT
+    SPAMWATCH_API = Config.SPAMWATCH_API
+    SESSION_STRING = Config.SESSION_STRING
+    INFOPIC = Config.INFOPIC
+    BOT_USERNAME = Config.BOT_USERNAME
+    STRING_SESSION = Config.STRING_SESSION
+    LASTFM_API_KEY = Config.LASTFM_API_KEY
+    CF_API_KEY = Config.CF_API_KEY
+
+    try:
+        BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
+    except ValueError:
+        raise Exception("Your blacklisted chats list does not contain valid integers.")
+
+# If you forking dont remove this id, just add your id. LOL...
+
+DRAGONS.add(OWNER_ID)
+DEV_USERS.add(OWNER_ID)
+
+REDIS = StrictRedis.from_url(REDIS_URL,decode_responses=True)
+try:
+    REDIS.ping()
+    LOGGER.info("Your redis server is now alive!")
+except BaseException:
+    raise Exception("Your redis server is not alive, please check again.")
+    
+finally:
+   REDIS.ping()
+   LOGGER.info("Your redis server is now alive!")
+
+
+if not SPAMWATCH_API:
+    sw = None
+    LOGGER.warning("SpamWatch API key missing! recheck your config")
+else:
+    try:
+        sw = spamwatch.Client(SPAMWATCH_API)
     except:
-        is_mod = False
-    return is_mod
+        sw = None
+        LOGGER.warning("Can't connect to SpamWatch!")
 
+from KomiRobot.modules.sql import SESSION
 
-def get_readable_time(seconds: int) -> int:
-    count = 0
-    ping_time = ""
-    time_list = []
-    time_suffix_list = ["s", "m", "h", "days"]
+defaults = tg.Defaults(run_async=True)
+updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
+telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
+dispatcher = updater.dispatcher
+print("[INFO]: INITIALIZING AIOHTTP SESSION")
+aiohttpsession = ClientSession()
+# ARQ Client
+print("[INFO]: INITIALIZING ARQ CLIENT")
+arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
-    while count < 4:
-        count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
-        if seconds == 0 and remainder == 0:
-            break
-        time_list.append(int(result))
-        seconds = int(remainder)
+ubot2 = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
+try:
+    ubot2.start()
+except BaseException:
+    print("Userbot Error ! Have you added a STRING_SESSION in deploying??")
+    sys.exit(1)
 
-    for x in range(len(time_list)):
-        time_list[x] = str(time_list[x]) + time_suffix_list[x]
-    if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
+pbot = Client(
+    ":memory:",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=TOKEN,
+    workers=min(32, os.cpu_count() + 4),
+)
+apps = []
+apps.append(pbot)
+loop = asyncio.get_event_loop()
 
-    time_list.reverse()
-    ping_time += ":".join(time_list)
-
-    return ping_time
-
-
-def time_formatter(milliseconds: int) -> str:
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = (
-        ((str(days) + " day(s), ") if days else "")
-        + ((str(hours) + " hour(s), ") if hours else "")
-        + ((str(minutes) + " minute(s), ") if minutes else "")
-        + ((str(seconds) + " second(s), ") if seconds else "")
-        + ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
-    )
-    return tmp[:-2]
-
-
-async def delete_or_pass(message):
-    if message.from_user.id == 1141839926:
-        return message
-    return await message.delete()
-
-
-def humanbytes(size):
-    if not size:
-        return ""
-    power = 2 ** 10
-    raised_to_pow = 0
-    dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
-    while size > power:
-        size /= power
-        raised_to_pow += 1
-    return str(round(size, 2)) + " " + dict_power_n[raised_to_pow] + "B"
-
-
-async def progress(current, total, message, start, type_of_ps, file_name=None):
-    now = time.time()
-    diff = now - start
-    if round(diff % 10.00) == 0 or current == total:
-        percentage = current * 100 / total
-        speed = current / diff
-        elapsed_time = round(diff) * 1000
-        if elapsed_time == 0:
-            return
-        time_to_completion = round((total - current) / speed) * 1000
-        estimated_total_time = elapsed_time + time_to_completion
-        progress_str = "{0}{1} {2}%\n".format(
-            "".join(["🔴" for i in range(math.floor(percentage / 10))]),
-            "".join(["🔘" for i in range(10 - math.floor(percentage / 10))]),
-            round(percentage, 2),
-        )
-        tmp = progress_str + "{0} of {1}\nETA: {2}".format(
-            humanbytes(current), humanbytes(total), time_formatter(estimated_total_time)
-        )
-        if file_name:
-            try:
-                await message.edit(
-                    "{}\n**File Name:** `{}`\n{}".format(type_of_ps, file_name, tmp)
-                )
-            except FloodWait as e:
-                await asyncio.sleep(e.x)
-            except MessageNotModified:
-                pass
-        else:
-            try:
-                await message.edit("{}\n{}".format(type_of_ps, tmp))
-            except FloodWait as e:
-                await asyncio.sleep(e.x)
-            except MessageNotModified:
-                pass
-
-
-def get_text(message: Message) -> [None, str]:
-    text_to_return = message.text
-    if message.text is None:
-        return None
-    if " " in text_to_return:
+async def get_entity(client, entity):
+    entity_client = client
+    if not isinstance(entity, Chat):
         try:
-            return message.text.split(None, 1)[1]
-        except IndexError:
-            return None
-    else:
-        return None
-
-
-async def iter_chats(client):
-    chats = []
-    async for dialog in client.iter_dialogs():
-        if dialog.chat.type in ["supergroup", "channel"]:
-            chats.append(dialog.chat.id)
-    return chats
-
-
-async def fetch_audio(client, message):
-    time.time()
-    if not message.reply_to_message:
-        await message.reply("`Reply To A Video / Audio.`")
-        return
-    warner_stark = message.reply_to_message
-    if warner_stark.audio is None and warner_stark.video is None:
-        await message.reply("`Format Not Supported`")
-        return
-    if warner_stark.video:
-        lel = await message.reply("`Video Detected, Converting To Audio !`")
-        warner_bros = await message.reply_to_message.download()
-        stark_cmd = f"ffmpeg -i {warner_bros} -map 0:a friday.mp3"
-        await runcmd(stark_cmd)
-        final_warner = "friday.mp3"
-    elif warner_stark.audio:
-        lel = await edit_or_reply(message, "`Download Started !`")
-        final_warner = await message.reply_to_message.download()
-    await lel.edit("`Almost Done!`")
-    await lel.delete()
-    return final_warner
-
-
-async def edit_or_reply(message, text, parse_mode="md"):
-    if message.from_user.id:
-        if message.reply_to_message:
-            kk = message.reply_to_message.message_id
-            return await message.reply_text(
-                text, reply_to_message_id=kk, parse_mode=parse_mode
-            )
-        return await message.reply_text(text, parse_mode=parse_mode)
-    return await message.edit(text, parse_mode=parse_mode)
-
-
-async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
-    """run command in terminal"""
-    args = shlex.split(cmd)
-    process = await asyncio.create_subprocess_exec(
-        *args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-    )
-    stdout, stderr = await process.communicate()
-    return (
-        stdout.decode("utf-8", "replace").strip(),
-        stderr.decode("utf-8", "replace").strip(),
-        process.returncode,
-        process.pid,
-    )
-
-
-async def convert_to_image(message, client) -> [None, str]:
-    """Convert Most Media Formats To Raw Image"""
-    final_path = None
-    if not (
-        message.reply_to_message.photo
-        or message.reply_to_message.sticker
-        or message.reply_to_message.media
-        or message.reply_to_message.animation
-        or message.reply_to_message.audio
-    ):
-        return None
-    if message.reply_to_message.photo:
-        final_path = await message.reply_to_message.download()
-    elif message.reply_to_message.sticker:
-        if message.reply_to_message.sticker.mime_type == "image/webp":
-            final_path = "webp_to_png_s_proton.png"
-            path_s = await message.reply_to_message.download()
-            im = Image.open(path_s)
-            im.save(final_path, "PNG")
-        else:
-            path_s = await client.download_media(message.reply_to_message)
-            final_path = "lottie_proton.png"
-            cmd = (
-                f"lottie_convert.py --frame 0 -if lottie -of png {path_s} {final_path}"
-            )
-            await runcmd(cmd)
-    elif message.reply_to_message.audio:
-        thumb = message.reply_to_message.audio.thumbs[0].file_id
-        final_path = await client.download_media(thumb)
-    elif message.reply_to_message.video or message.reply_to_message.animation:
-        final_path = "fetched_thumb.png"
-        vid_path = await client.download_media(message.reply_to_message)
-        await runcmd(f"ffmpeg -i {vid_path} -filter:v scale=500:500 -an {final_path}")
-    return final_path
-
-
-async def convert_seconds_to_minutes(seconds: int):
-    seconds = int(seconds)
-    seconds = seconds % (24 * 3600)
-    seconds %= 3600
-    minutes = seconds // 60
-    seconds %= 60
-    return "%02d:%02d" % (minutes, seconds)
-
-
-
-
-def get_text(message: Message) -> [None, str]:
-    """Extract Text From Commands"""
-    text_to_return = message.text
-    if message.text is None:
-        return None
-    if " " in text_to_return:
+            entity = int(entity)
+        except ValueError:
+            pass
+        except TypeError:
+            entity = entity.id
         try:
-            return message.text.split(None, 1)[1]
-        except IndexError:
-            return None
-    else:
-        return None
+            entity = await client.get_chat(entity)
+        except (PeerIdInvalid, ChannelInvalid):
+            for kp in apps:
+                if kp != client:
+                    try:
+                        entity = await kp.get_chat(entity)
+                    except (PeerIdInvalid, ChannelInvalid):
+                        pass
+                    else:
+                        entity_client = kp
+                        break
+            else:
+                entity = await kp.get_chat(entity)
+                entity_client = kp
+    return entity, entity_client
 
 
-# Admin check
-
-admins: Dict[str, List[User]] = {}
-
-
-def set(chat_id: Union[str, int], admins_: List[User]):
-    if isinstance(chat_id, int):
-        chat_id = str(chat_id)
-
-    admins[chat_id] = admins_
+async def eor(msg: Message, **kwargs):
+    func = msg.edit_text if msg.from_user.is_self else msg.reply
+    spec = getfullargspec(func.__wrapped__).args
+    return await func(**{k: v for k, v in kwargs.items() if k in spec})
 
 
-def get(chat_id: Union[str, int]) -> Union[List[User], bool]:
-    if isinstance(chat_id, int):
-        chat_id = str(chat_id)
+DRAGONS = list(DRAGONS) + list(DEV_USERS)
+DEV_USERS = list(DEV_USERS)
+WOLVES = list(WOLVES)
+DEMONS = list(DEMONS)
+TIGERS = list(TIGERS)
 
-    if chat_id in admins:
-        return admins[chat_id]
+# Load at end to ensure all prev variables have been set
+from KomiRobot.modules.helper_funcs.handlers import (
+    CustomCommandHandler,
+    CustomMessageHandler,
+    CustomRegexHandler,
+)
 
-    return False
-
-
-async def get_administrators(chat: Chat) -> List[User]:
-    _get = get(chat.id)
-
-    if _get:
-        return _get
-    set(
-        chat.id,
-        [member.user for member in await chat.get_members(filter="administrators")],
-    )
-    return await get_administrators(chat)
-
-
-def admins_only(func: Callable) -> Coroutine:
-    async def wrapper(client: Client, message: Message):
-        if message.from_user.id == OWNER_ID:
-            return await func(client, message)
-        admins = await get_administrators(message.chat)
-        for admin in admins:
-            if admin.id == message.from_user.id:
-                return await func(client, message)
-
-    return wrapper
-
-
-
-def capture_err(func):
-    @wraps(func)
-    async def capture(client, message, *args, **kwargs):
-        try:
-            return await func(client, message, *args, **kwargs)
-        except Exception as err:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            errors = traceback.format_exception(
-                etype=exc_type,
-                value=exc_obj,
-                tb=exc_tb,
-            )
-            error_feedback = split_limits(
-                "**ERROR** | `{}` | `{}`\n\n```{}```\n\n```{}```\n".format(
-                    0 if not message.from_user else message.from_user.id,
-                    0 if not message.chat else message.chat.id,
-                    message.text or message.caption,
-                    "".join(errors),
-                ),
-            )
-            for x in error_feedback:
-                await kp.send_message(SUPPORT_CHAT, x)
-            raise err
-
-    return capture
-
-
-# Special credits to TheHamkerCat
-
-
-async def member_permissions(chat_id, user_id):
-    perms = []
-    member = await kp.get_chat_member(chat_id, user_id)
-    if member.can_post_messages:
-        perms.append("can_post_messages")
-    if member.can_edit_messages:
-        perms.append("can_edit_messages")
-    if member.can_delete_messages:
-        perms.append("can_delete_messages")
-    if member.can_restrict_members:
-        perms.append("can_restrict_members")
-    if member.can_promote_members:
-        perms.append("can_promote_members")
-    if member.can_change_info:
-        perms.append("can_change_info")
-    if member.can_invite_users:
-        perms.append("can_invite_users")
-    if member.can_pin_messages:
-        perms.append("can_pin_messages")
-    return perms
+# make sure the regex handler can take extra kwargs
+tg.RegexHandler = CustomRegexHandler
+tg.CommandHandler = CustomCommandHandler
+tg.MessageHandler = CustomMessageHandler
