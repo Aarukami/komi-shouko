@@ -5,7 +5,7 @@ from random import randint
 from pprint import pprint
 from KomiRobot.utils.keyboard import AKI_LANG_BUTTON, AKI_LEADERBOARD_KEYBOARD, AKI_PLAY_KEYBOARD, AKI_WIN_BUTTON, CHILDMODE_BUTTON
 from telegram import Update, ParseMode
-from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQueryHandler
+from telegram.ext import run_async, CommandHandler, CallbackContext, CallbackQueryHandler
 from KomiRobot import TOKEN  , dispatcher
 from KomiRobot.utils.database import (
     addUser, 
@@ -75,7 +75,7 @@ def aki_play_callback_handler(update: Update, context:CallbackContext) -> None:
     if aki.progression < 80:
         query.message.edit_media(
             InputMediaPhoto(
-                open(f'KomiRobot/resources/komiimg/komi0{randint(1,4)}.png', 'rb'),
+                open(f'KomiRobot/resources/komiimg/komi0{randint(1,4)}.jpg', 'rb'),
                 caption=q,
             ),
             reply_markup=AKI_PLAY_KEYBOARD
@@ -103,7 +103,7 @@ def aki_win(update: Update, context: CallbackContext):
     if ans =='y':
         query.message.edit_media(
             InputMediaPhoto(
-                media=open('KomiRobot/resources/komiimg/komi_win.png', 'rb'),
+                media=open('KomiRobot/resources/komiimg/komi_win.jpg', 'rb'),
                 caption="gg!"
             ),
             reply_markup=None
@@ -112,7 +112,7 @@ def aki_win(update: Update, context: CallbackContext):
     else:
         query.message.edit_media(
             InputMediaPhoto(
-                media=open('KomiRobot/resources/komiimg/komi_defeat.png', 'rb'),
+                media=open('KomiRobot/resources/komiimg/komi_defeat.jpg', 'rb'),
                 caption="bruh :("
             ),
             reply_markup=None
@@ -184,7 +184,7 @@ def del_data(context:CallbackContext, user_id: int):
 
 def aki_lead(update: Update, _:CallbackContext) -> None:
     update.message.reply_text(
-        text="Check Leaderboard on specific categories in Akinator.",
+        text="Check Leaderboard on specific categories in komi.",
         reply_markup=AKI_LEADERBOARD_KEYBOARD
     )
 
