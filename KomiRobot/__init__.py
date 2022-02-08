@@ -2,7 +2,6 @@ import asyncio
 import logging
 import os
 import sys
-import aiohttp
 import json
 import asyncio
 import time
@@ -11,6 +10,7 @@ import telegram.ext as tg
 
 from inspect import getfullargspec
 from aiohttp import ClientSession
+from Python_ARQ import ARQ
 from telethon import TelegramClient
 from redis import StrictRedis
 from telethon.sessions import StringSession
@@ -19,16 +19,9 @@ from pyrogram.types import Message
 from pyrogram import Client, errors
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from pyrogram.types import Chat, User
-from sqlite3 import connect
 from ptbcontrib.postgres_persistence import PostgresPersistence
 
 StartTime = time.time()
-
-
-
-DB_NAME = "db.sqlite3"
-
-conn = connect(DB_NAME)
 
 def get_user_list(__init__, key):
     with open("{}/KomiRobot/{}".format(os.getcwd(), __init__), "r") as json_file:
@@ -90,8 +83,6 @@ if ENV:
         TIGERS = {int(x) for x in os.environ.get("TIGERS", "").split()}
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
-        
-
 
     INFOPIC = bool(os.environ.get("INFOPIC", True))
     BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
@@ -252,12 +243,13 @@ from KomiRobot.modules.sql import SESSION
 
 defaults = tg.Defaults(run_async=True)
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
-telethn = TelegramClient("asuna", API_ID, API_HASH)
-pgram = Client("KuramaPyro", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
+telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
 print("[INFO]: INITIALIZING AIOHTTP SESSION")
+aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
+arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
 ubot2 = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
 try:
@@ -266,7 +258,13 @@ except BaseException:
     print("Userbot Error ! Have you added a STRING_SESSION in deploying??")
     sys.exit(1)
 
-pbot = Client("asunapbot", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
+pbot = Client(
+    ":memory:",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=TOKEN,
+    workers=min(32, os.cpu_count() + 4),
+)
 apps = []
 apps.append(pbot)
 loop = asyncio.get_event_loop()
