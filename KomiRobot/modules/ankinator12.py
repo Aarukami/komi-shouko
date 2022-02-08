@@ -75,7 +75,7 @@ def aki_play_callback_handler(update: Update, context:CallbackContext) -> None:
     if aki.progression < 80:
         query.message.edit_media(
             InputMediaPhoto(
-                open(f'KomiRobot/resources/komiimg/komi1{randint(1,5)}.png', 'rb'),
+                open(f'KomiRobot/resources/komiimg/komi0{randint(1,4)}.png', 'rb'),
                 caption=q,
             ),
             reply_markup=AKI_PLAY_KEYBOARD
