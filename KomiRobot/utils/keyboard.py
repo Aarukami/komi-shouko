@@ -1,4 +1,4 @@
-from strings import AKI_LANG_CODE, DEV_URL, GITHUB_URL
+from KomiRobot.modules.strings import AKI_LANG_CODE
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
