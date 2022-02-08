@@ -241,7 +241,7 @@ def aki_lead_cb_handler(update: Update, context:CallbackContext) -> None:
     dispatcher.add_handler(FIND_HANDLER)   
     dispatcher.add_handler(ME_KOMI_HANDLER)
     dispatcher.add_handler(PLAY_KOMI_HANDLER)
-    dispatcher.add_handler(LANG_KOMI_HANDLER))
+    dispatcher.add_handler(LANG_KOMI_HANDLER)
     dispatcher.add_handler(KOMI_CHILD_HANDLER)
     dispatcher.add_handler(LEADERBOARD_HANDLER)
     dispatcher.add_handler(SET_LANG_KOMI_HANDLER)
