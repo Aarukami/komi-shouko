@@ -3,7 +3,7 @@ import akinator
 from telegram.files.inputmedia import InputMediaPhoto
 from random import randint
 from pprint import pprint
-from KomiRobot.utils.keyboard import AKI_LANG_BUTTON, AKI_LEADERBOARD_KEYBOARD, AKI_PLAY_KEYBOARD, AKI_WIN_BUTTON, CHILDMODE_BUTTON, START_KEYBOARD
+from KomiRobot.utils.keyboard import AKI_LANG_BUTTON, AKI_LEADERBOARD_KEYBOARD, AKI_PLAY_KEYBOARD, AKI_WIN_BUTTON, CHILDMODE_BUTTON
 from telegram import Update, ParseMode
 from telegram.ext import Updater, CommandHandler, CallbackContext, CallbackQueryHandler
 from KomiRobot import TOKEN  , dispatcher
