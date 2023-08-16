@@ -1,6 +1,5 @@
 FROM debian:11
-FROM python:3.10.12-slim-buster
-
+FROM python:latest
 WORKDIR /KomiRobot/
 
 RUN apt-get update && apt-get upgrade -y
@@ -14,4 +13,4 @@ RUN pip3 install wheel
 RUN pip3 install --no-cache-dir -U -r requirements.txt
 
 COPY . .
-CMD ["python3.9", "-m", "KomiRobot"]
+CMD ["python3", "-m", "KomiRobot"]
