@@ -81,6 +81,16 @@ PM_START_TEXT = """
 ────────────────────────
 ✪ Hit /help to see my available commands.
 """
+KOMI_IMG = (
+    "https://telegra.ph/file/2caac680a6112331fcf1d.mp4",
+    "https://telegra.ph/file/5ea0343b50a90aa14e6a0.mp4",
+)
+
+KOMI_IMAGE =( 
+    "https://telegra.ph/file/0d34a21ce9a8f09d114ed.jpg",
+    "https://telegra.ph/file/991d572ed3499cd674b2b.jpg",
+    "https://telegra.ph/file/6e133215b00574321d474.jpg",
+)
 
 HELP_STRINGS = """
 Click on the button bellow to get description about specifics command."""
@@ -175,13 +185,13 @@ def start(update: Update, context: CallbackContext):
                 IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
         else:
             first_name = update.effective_user.first_name
-            update.effective_message.reply_text(
-                PM_START_TEXT.format(
+            update.effective_message.reply_video(
+                random.choice(KOMI_IMG) , caption=PM_START_TEXT.format(
                     escape_markdown(first_name),
+                    context.bot.first_name , 
                     escape_markdown(uptime),
                     sql.num_users(),
-                    sql.num_chats()),                        
-                parse_mode=ParseMode.MARKDOWN,
+                    sql.num_chats()), 
                 timeout=60,
                 disable_web_page_preview=False,
                 reply_markup=InlineKeyboardMarkup(
