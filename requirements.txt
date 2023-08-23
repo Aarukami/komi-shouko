@@ -58,7 +58,6 @@ asyncio
 cloudscraper
 dateparser
 pymongo
-dnspython
 secureme
 apscheduler
 emoji-country-flag
@@ -66,6 +65,7 @@ countryinfo
 html2text
 bs4
 redis
+dnspython==2.3.0
 pySmartDL
 bing_image_downloader
 search_engine_parser
