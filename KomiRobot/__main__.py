@@ -74,7 +74,7 @@ def get_readable_time(seconds: int) -> str:
 
 PM_START_TEXT = """
 *Hello {} !*
-✪ I'm an anime-theme management bot [✨](https://te.legra.ph/file/71348ccf46411d7c7a251.mp4)
+✪ I'm an anime-theme management bot ✨
 ────────────────────────
 × *Uptime:* `{}`
 × `{}` *users, across* `{}` *chats.*
@@ -224,14 +224,14 @@ def start(update: Update, context: CallbackContext):
                     [
                         InlineKeyboardButton(
                             text="「SUPPORT」",
-                            url=f"https://telegram.dog/{SUPPORT_CHAT}",
+                            url=f"https://telegram.dog/komi_support",
                         ),
                         InlineKeyboardButton(
                             text="「UPDATES」",
-                            url="https://telegram.dog/komisanupdates",
+                            url="https://telegram.dog/shouko_updates",
                         ),
                         InlineKeyboardButton(
-                          text="「HELP」", url=f"https://t.me/komiXrobot?start=help"
+                          text="「HELP」", url=f"https://t.me/komiXprobot?start=help"
                         ),  
                     ]
                 ]
