@@ -72,6 +72,7 @@ class Config(object):
     ALLOW_CHATS = ""
     MONGO_DB_URI = ""
     ARQ_API_KEY = ""
+    ARQ_API_URL = ""
 
 
 class Production(Config):
