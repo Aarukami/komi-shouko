@@ -14,8 +14,8 @@ from KomiRobot import (
 )
 from telegram import Chat, ChatMember, ParseMode, Update
 from telegram.ext import CallbackContext
-# stores admemes in memory for 10 min.
-# stores admemes in memory for 10 min.
+
+
 ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
 THREAD_LOCK = RLock()
 
@@ -406,37 +406,6 @@ def connection_status(func):
 
 
 # Workaround for circular import with connection.py
-from KomiRobot.modules import connection
+from KoiRobot.modules import connection
 
-connected = connection.connected
-        ):
-            update.effective_message.reply_text(
-                "Sorry son, but you're not worthy to wield the banhammer.",
-            )
-            return ""
-        return func(update, context, *args, **kwargs)
-    return user_is_banhammer
-def connection_status(func):
-    @wraps(func)
-    def connected_status(update: Update, context: CallbackContext, *args, **kwargs):
-        conn = connected(
-            context.bot,
-            update,
-            update.effective_chat,
-            update.effective_user.id,
-            need_admin=False,
-        )
-        if conn:
-            chat = dispatcher.bot.getChat(conn)
-            update.__setattr__("_effective_chat", chat)
-            return func(update, context, *args, **kwargs)
-        if update.effective_message.chat.type == "private":
-            update.effective_message.reply_text(
-                "Send /connect in a group that you and I have in common first.",
-            )
-            return connected_status
-        return func(update, context, *args, **kwargs)
-    return connected_status
-# Workaround for circular import with connection.py
-from KomiRobot.modules import connection
 connected = connection.connected
