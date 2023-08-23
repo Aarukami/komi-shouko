@@ -71,6 +71,7 @@ class Config(object):
     OPENWEATHERMAP_ID = "887da2c60d9f13fe78b0f9d0c5cbaade"
     ALLOW_CHATS = ""
     MONGO_DB_URI = ""
+    ARQ_API_KEY = ""
 
 
 class Production(Config):
