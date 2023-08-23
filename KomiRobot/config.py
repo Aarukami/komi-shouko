@@ -73,6 +73,7 @@ class Config(object):
     MONGO_DB_URI = ""
     ARQ_API_KEY = ""
     ARQ_API_URL = ""
+    TEMP_DOWNLOAD_DIRECTORY = ""
 
 
 class Production(Config):
