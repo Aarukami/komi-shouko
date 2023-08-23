@@ -406,6 +406,6 @@ def connection_status(func):
 
 
 # Workaround for circular import with connection.py
-from KoiRobot.modules import connection
+from KomiRobot.modules import connection
 
 connected = connection.connected
