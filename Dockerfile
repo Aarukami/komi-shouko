@@ -30,12 +30,6 @@ RUN pip install --no-cache-dir -U -r requirements.txt
 # Copy all files from the current directory into the /KomiRobot/ directory inside the container
 COPY . .
 
-
-# Expose port 8080
-EXPOSE 8080/tcp
-
-# Set the command to run the komirobot python module
-# We will use the CMD command to specify the command that should be executed when the container starts.
 # In this case, we will run the komirobot module using the python3 interpreter.
 CMD ["python3", "-m", "KomiRobot"]
 
