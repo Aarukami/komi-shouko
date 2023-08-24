@@ -74,6 +74,7 @@ class Config(object):
     ARQ_API_KEY = ""
     ARQ_API_URL = ""
     TEMP_DOWNLOAD_DIRECTORY = ""
+    HEROKU_APP_NAME= ""
     HEROKU_API_KEY = ""
 
 
