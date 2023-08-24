@@ -1,4 +1,5 @@
 FROM debian:11
+FROM python:3.9
 
 
 # Set the working directory to /KomiRobot/
