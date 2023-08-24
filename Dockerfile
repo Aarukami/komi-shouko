@@ -21,17 +21,21 @@ RUN pip install wheel
 # Set an environment variable to ignore root user actions during package installations
 ENV PIP_ROOT_USER_ACTION=ignore
 
-# Install all the required packages listed in requirements#.txt We will
- use the -r flag to specify the requirements.txt file and install all the packages.
+# Install all the required packages listed in requirements.txt
+# We will use the -r flag to specify the requirements.txt file and install all the packages.
+# Fixed the typo in the comment on the previous line, 'requirements#.txt' should be 'requirements.txt'
 RUN pip install --no-cache-dir -U -r requirements.txt
 
 # Copy all files from the current directory into the /KomiRobot/ directory inside the container
 COPY . .
+
+
+# Expose port 8080
+EXPOSE 8080/tcp
 
 # Set the command to run the komirobot python module
 # We will use the CMD command to specify the command that should be executed when the container starts.
 # In this case, we will run the komirobot module using the python3 interpreter.
 CMD ["python3", "-m", "KomiRobot"]
 
-# Expose port 8080
-EXPOSE 8080/tcp
+
