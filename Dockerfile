@@ -19,4 +19,4 @@ COPY . .
 # In this case, we will run python the komirobot module using the python3 interpreter.
 CMD ["python3", "-m", "KomiRobot"]
 
-
+EXPOSE 8000
