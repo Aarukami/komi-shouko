@@ -1,3 +1,4 @@
+
 # There is no need to have two identical parts in the Dockerfile. 
 # Therefore, we will remove the duplicated part and keep only one.
 # We will comment out the duplicate lines.
@@ -16,6 +17,6 @@ COPY . .
 # Set the command to run the komirobot python module
 # We will use the CMD command to specify the command that should be executed when the container starts.
 # In this case, we will run python the komirobot module using the python3 interpreter.
-CMD ["python3", "-m", "KomiRobot"]
+CMD ["python3", "-m", "komirobot"]
 
 EXPOSE 5000
