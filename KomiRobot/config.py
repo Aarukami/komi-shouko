@@ -76,6 +76,7 @@ class Config(object):
     TEMP_DOWNLOAD_DIRECTORY = ""
     HEROKU_APP_NAME= ""
     HEROKU_API_KEY = ""
+    REDIS_URL = ""
 
 
 class Production(Config):
