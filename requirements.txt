@@ -1,4 +1,4 @@
-future
+futures
 emoji
 lxml
 wget
