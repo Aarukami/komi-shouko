@@ -4,6 +4,7 @@
 # Therefore, let's make the following changes:
 
 # Specify the base image with the desired Python version
+FROM debian:11
 FROM python:3.10.4
 
 # Set the working directory inside the container
@@ -16,14 +17,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y git wget curl bas
 COPY requirements.txt .
 
 # Install the 'wheel' package
-RUN python3 -m pip install wheel
+RUN pip install wheel
 
 # Set an environment variable to ignore root user actions during package installations
 ENV PIP_ROOT_USER_ACTION=ignore
 
-# Install all the required packages listed in requirements.txt
-# We will use the -r flag to specify the requirements.txt file and install all the packages.
-RUN python3 -m pip install --no-cache-dir -U -r requirements.txt
+# Install all the required packages listed in requirements#.txt We will
+ use the -r flag to specify the requirements.txt file and install all the packages.
+RUN pip install --no-cache-dir -U -r requirements.txt
 
 # Copy all files from the current directory into the /KomiRobot/ directory inside the container
 COPY . .
