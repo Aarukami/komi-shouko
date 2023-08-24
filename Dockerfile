@@ -1,7 +1,8 @@
 
 # The FROM command is used to specify the base image for the Dockerfile.
 # We will use the python:3.9 image as our base image.
-FROM python:3.9
+FROM debian:11
+FROM python:3.10.12-slim-buster
 
 # Set the working directory to /KomiRobot/
 # This is where the application files will be copied to.
