@@ -34,4 +34,4 @@ COPY . .
 CMD ["python3", "-m", "KomiRobot"]
 
 # Expose port 8080
-EXPOSE 8080
+EXPOSE 8080/tcp
