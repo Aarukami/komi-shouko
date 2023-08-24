@@ -1,5 +1,5 @@
 FROM debian:11
-FROM python:latest
+
 
 # Set the working directory to /KomiRobot/
 WORKDIR /KomiRobot/
@@ -14,14 +14,14 @@ RUN apt-get install -y wget python3-pip curl bash neofetch ffmpeg software-prope
 COPY requirements.txt .
 
 # Install wheel package
-RUN pip3 install wheel
+RUN python3.9 -m pip install wheel
 
 # Install all the required packages listed in requirements.txt
-RUN pip3 install --no-cache-dir -U -r requirements.txt
+RUN python3.9 -m pip install --no-cache-dir -U -r requirements.txt
 
 # Copy the rest of the files to the working directory
 COPY . .
 
 # Set the command to run the KomiRobot python module
-CMD ["python3", "-m", "KomiRobot"]
+CMD ["python3.9", "-m", "KomiRobot"]
 
