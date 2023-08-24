@@ -1,6 +1,7 @@
 
 # The original Dockerfile contains two FROM commands, which is not valid.
 #We will remove the first FROM command (FROM debian:11) and use the second one as the base image.
+FROM python:3.9
 
 # Set the working directory to /KomiRobot/
 # This is where the application files will be copied to.
