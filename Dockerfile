@@ -12,6 +12,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y git wget curl bas
 COPY requirements.txt .
 
 RUN python3 -m pip install wheel
+ENV PIP_ROOT_USER_ACTION=ignore
 
 # Fix Typo: The original command incorrectly specifies the Python module as KomiRobot instead of komirobot
 # Install all the required packages listed in requirements.txt
