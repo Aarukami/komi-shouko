@@ -4,6 +4,7 @@
 # Therefore, let's make the following changes:
 
 # Specify the base image with the desired Python version
+FROM debian:11
 FROM python:3.10.4
 
 # Set the working directory inside the container
