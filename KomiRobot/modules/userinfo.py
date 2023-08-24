@@ -480,8 +480,7 @@ def stats(update: Update, context: CallbackContext):
         update.effective_message.reply_text(status +
             "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS]) +
-            "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n" +
-            "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n",
+            "\n\n[Updates](https://t.me/shouko_updates) | [Support](https://t.me/komi_Support)\n\n" ,
         parse_mode=ParseMode.MARKDOWN , reply_markup=InlineKeyboardMarkup(kb) , disable_web_page_preview=True)
     except BaseException:
         update.effective_message.reply_text(
@@ -491,9 +490,8 @@ def stats(update: Update, context: CallbackContext):
                         "\n*Bot statistics*:\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
-                    + "\n\n[Updates](https://t.me/komi_modernize) | [Support](https://t.me/komiXSupport)\n\n"
+                    + "\n\n[Updates](https://t.me/shouko_updates) | [Support](https://t.me/komi_Support)\n\n"
                 )
-                + "╘══「 Powered  by [• 𝗕𝗼𝗻𝘁𝗲𝗻 •](https://t.me/Bonten_community) 」\n"
             ),
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(kb),
