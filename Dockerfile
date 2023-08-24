@@ -6,7 +6,7 @@ FROM python:3.10.12-slim-buster
 
 # Set the working directory to /KomiRobot/
 # This is where the application files will be copied to.
-WORKKDIR /KomiRobot/
+WORKDIR /KomiRobot/
 
 # Update and install dependencies
 # We will replace the first FROM command with the debian image to install additional dependencies.
