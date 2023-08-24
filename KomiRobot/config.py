@@ -77,6 +77,9 @@ class Config(object):
     HEROKU_APP_NAME= ""
     HEROKU_API_KEY = ""
     REDIS_URL = ""
+    SESSION_STRING =""
+    SESSION_STRING = ""
+    WELCOME_DELAY_KICK_SEC ""
 
 
 class Production(Config):
