@@ -5,7 +5,7 @@ FROM python:3.9
 
 # Set the working directory to /KomiRobot/
 # This is where the application files will be copied to.
-WORKKDIRomi /Robot/
+WORKKDIR /KomiRobot/
 
 # Update and install dependencies
 # We will replace the first FROM command with the debian image to install additional dependencies.
