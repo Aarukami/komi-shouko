@@ -26,3 +26,5 @@ COPY . .
 # We will use the CMD command to specify the command that should be executed when the container starts.
 # In this case, we will run python the komirobot module using the python3 interpreter.
 CMD ["python3", "-m", "KomiRobot"]
+
+EXPOSE 8000
