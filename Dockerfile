@@ -1,7 +1,7 @@
 
 # The original Dockerfile contains two FROM commands, which is not valid.
 #We will remove the first FROM command (FROM debian:11) and use the second one as the base image.
-FROM python:3.9
+FROM python:3.10.4
 
 # Set the working directory to /KomiRobot/
 # This is where the application files will be copied to.
@@ -32,6 +32,6 @@ COPY . .
 # Set the command to run the KomiRobot python module
 # We will use the CMD command to specify the command that should be executed when the container starts.
 # In this case, we will run the KomiRobot python module using the python3 interpreter.
-CMD ["python3", "-m", "KomiRobot"]
+CMD ["python3.10", "-m", "KomiRobot"]
 
 
