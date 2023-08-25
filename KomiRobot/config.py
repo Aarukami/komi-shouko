@@ -81,6 +81,9 @@ class Config(object):
     SESSION_STRING = ""
     WELCOME_DELAY_KICK_SEC =""
     BOT_USERNAME = ""
+    STRING_SESSION = ""
+    LASTFM_API_KEY = ""
+    CF_API_KEY = ""
 
 
 class Production(Config):
