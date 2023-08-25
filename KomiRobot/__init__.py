@@ -10,7 +10,6 @@ import telegram.ext as tg
 
 from inspect import getfullargspec
 from aiohttp import ClientSession
-from Python_ARQ import ARQ
 from telethon import TelegramClient
 from redis import StrictRedis
 from telethon.sessions import StringSession
@@ -246,9 +245,6 @@ telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
 print("[INFO]: INITIALIZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
-# ARQ Client
-print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
 pbot = Client(
     ":memory:",
