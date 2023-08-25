@@ -42,12 +42,6 @@ LOGGER.info("Shouko komi is starting. | An Dezilleius Project Parts. | Licensed 
 LOGGER.info("Not affiliated to other anime or Villain in any way whatsoever.")
 LOGGER.info("Project maintained by: github.com/Aarukami (t.me/Girls_lob)")
 
-# if version < 3.9, stop bot.
-if sys.version_info[0] < 3 or sys.version_info[1] < 9:
-    LOGGER.error(
-        "You MUST have a python version of at least 3.9! Multiple features depend on this. Bot quitting."
-    )
-    sys.exit(1)
 
 ENV = bool(os.environ.get("ENV", False))
 
