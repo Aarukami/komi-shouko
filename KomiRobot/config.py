@@ -14,12 +14,12 @@ class Config(object):
     # REQUIRED
     # Login to https://my.telegram.org and fill in these slots with the details given by it
 
-    API_ID = 123456  # integer value, dont use ""
-    API_HASH = "awoo"
+    API_ID = 16812684 # integer value, dont use ""
+    API_HASH = "ac3c705573aca82dd6b2fbc402e7797e"
     TOKEN = "BOT_TOKEN"  # This var used to be API_KEY but it is now TOKEN, adjust accordingly.
-    OWNER_ID = 945137470  # If you dont know, run the bot and do /id in your private chat with it, also an integer
-    OWNER_USERNAME = "saint_foire"
-    SUPPORT_CHAT = "machinaxsupport"  # Your own group for support, do not add the @
+    OWNER_ID =5205083498  # If you dont know, run the bot and do /id in your private chat with it, also an integer
+    OWNER_USERNAME = "Aaru_kun"
+    SUPPORT_CHAT = "komi_support"  # Your own group for support, do not add the @
     JOIN_LOGGER = (
         -1001180007354
     )  # Prints any new group the bot is added to, prints just the name and ID.
@@ -28,7 +28,7 @@ class Config(object):
     )  # Prints information like gbans, sudo promotes, AI enabled disable states that may help in debugging and shit
 
     # RECOMMENDED
-    SQLALCHEMY_DATABASE_URI = "something://somewhat:user@hosturl:port/databasename"  # needed for any database modules
+    SQLALCHEMY_DATABASE_URI = "postgres://dqsscdgh:axgg-TNHSaZ3hFvro-J7zBjJfDXrzZr_@castor.db.elephantsql.com/dqsscdgh"  # needed for any database modules
     LOAD = []
     NO_LOAD = ["rss", "cleaner", "connection", "math"]
     WEBHOOK = False
@@ -70,7 +70,7 @@ class Config(object):
     REM_BG_API_KEY = "xYCR1ZyK3ZsofjH7Y6hPcyzC"
     OPENWEATHERMAP_ID = "887da2c60d9f13fe78b0f9d0c5cbaade"
     ALLOW_CHATS = ""
-    MONGO_DB_URI = ""
+    MONGO_DB_URI = "mongodb+srv://Komi:Aarught5645@cluster0.8usl8ul.mongodb.net/?retryWrites=true&w=majority"
     ARQ_API_KEY = ""
     ARQ_API_URL = ""
     TEMP_DOWNLOAD_DIRECTORY = ""
@@ -80,10 +80,11 @@ class Config(object):
     SESSION_STRING =""
     SESSION_STRING = ""
     WELCOME_DELAY_KICK_SEC =""
-    BOT_USERNAME = ""
+    BOT_USERNAME = "Nagiprobot"
     STRING_SESSION = ""
     LASTFM_API_KEY = ""
     CF_API_KEY = ""
+    BOT_ID = 5206438744
 
 
 class Production(Config):
