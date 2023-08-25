@@ -80,6 +80,7 @@ class Config(object):
     SESSION_STRING =""
     SESSION_STRING = ""
     WELCOME_DELAY_KICK_SEC =""
+    BOT_USERNAME = ""
 
 
 class Production(Config):
