@@ -236,7 +236,7 @@ pbot = Client(
 apps = []
 apps.append(pbot)
 loop = asyncio.get_event_loop()
-instance = loop.run_until_complete()
+
 
 async def get_entity(client, entity):
     entity_client = client
