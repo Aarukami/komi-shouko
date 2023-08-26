@@ -7,7 +7,7 @@ from KomiRobot import MONGO_DB_URI
 
 
 
-MONGO_PORT = "27017"
+MONGO_PORT = 27017
 MONGO_DB_URI = "MONGO_DB_URI"
 MONGO_DB = "Izanabot"
 
