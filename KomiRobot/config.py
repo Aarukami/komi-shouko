@@ -70,7 +70,7 @@ class Config(object):
     REM_BG_API_KEY = "xYCR1ZyK3ZsofjH7Y6hPcyzC"
     OPENWEATHERMAP_ID = "887da2c60d9f13fe78b0f9d0c5cbaade"
     ALLOW_CHATS = ""
-    MONGO_DB_URI = "mongodb+srv://Komi:/?retryWrites=true&w=majority"
+    MONGO_DB_URI = "mongodb+srv://gojosatoru01102002:yrWfGpE8pqAK0GnU@cluster0.bgiquop.mongodb.net/?retryWrites=true&w=majority"
     ARQ_API_KEY = ""
     ARQ_API_URL = ""
     TEMP_DOWNLOAD_DIRECTORY = ""
