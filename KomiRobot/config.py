@@ -76,7 +76,7 @@ class Config(object):
     TEMP_DOWNLOAD_DIRECTORY = ""
     HEROKU_APP_NAME= ""
     HEROKU_API_KEY = ""
-    REDIS_URL = " redis://default:qenym0pkRhftQdAIeT8Mzu5VkKESnp4Lredis-14131.c264.ap-south-1-1.ec2.cloud.redislabs.com:14131"
+    REDIS_URL = "redis://default:qenym0pkRhftQdAIeT8Mzu5VkKESnp4Lredis-14131.c264.ap-south-1-1.ec2.cloud.redislabs.com:14131"
     SESSION_STRING =""
     SESSION_STRING = ""
     WELCOME_DELAY_KICK_SEC =""
