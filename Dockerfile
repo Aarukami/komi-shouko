@@ -12,8 +12,6 @@ COPY requirements.txt .
 RUN pip install wheel
 
 
-ENV PIP_ROOT_USER_ACTION=ignore
-
 
 RUN pip install --no-cache-dir -U -r requirements.txt
 
