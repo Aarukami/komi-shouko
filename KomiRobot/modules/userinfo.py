@@ -30,7 +30,6 @@ from KomiRobot import (
     WOLVES,
     INFOPIC,
     dispatcher,
-    sw,
     StartTime,
     SUPPORT_CHAT,
 )
@@ -290,12 +289,6 @@ def info(update: Update, context: CallbackContext):
     if user_id not in [bot.id, 777000, 1087968824]:
         userhp = hpmanager(user)
         text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
-    try:
-        spamwtc = sw.get_ban(int(user.id))
-        if spamwtc:
-            text += "\n\n<b>This person is Spamwatched!</b>"
-            text += f"\nReason: <pre>{spamwtc.reason}</pre>"
-            text += "\nAppeal at @SpamWatchSupport"
     except:
         pass  # don't crash if api is down somehow...
     disaster_level_present = False
