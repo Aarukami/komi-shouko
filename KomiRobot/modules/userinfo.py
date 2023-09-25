@@ -289,8 +289,6 @@ def info(update: Update, context: CallbackContext):
     if user_id not in [bot.id, 777000, 1087968824]:
         userhp = hpmanager(user)
         text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
-    except:
-        pass  # don't crash if api is down somehow...
     disaster_level_present = False
     if user.id == OWNER_ID:
         text += f"\n\nThis user is my Hubby."
