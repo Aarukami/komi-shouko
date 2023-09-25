@@ -14,7 +14,7 @@ import speedtest
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from pyrogram.types import Message
 
-from KomiRobot import aiohttpsession as aiosession
+
 from KomiRobot.ex_plugins.dbfunctions import start_restart_stage
 from KomiRobot.utils.http import get, post
 
@@ -85,12 +85,6 @@ def test_speedtest():
     download = speed.download()
     upload = speed.upload()
     return [speed_convert(download), speed_convert(upload), info]
-
-
-async def get_http_status_code(url: str) -> int:
-    async with aiosession.head(url) as resp:
-        return resp.status
-
 
 async def make_carbon(code):
     url = "https://carbonara.vercel.app/api/cook"
